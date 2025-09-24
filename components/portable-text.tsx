@@ -43,7 +43,8 @@ const components: PortableTextComponents = {
     image: ({ value }) => (
       <div className="my-8">
         <img
-          src={urlFor(value).url()}
+          src={urlFor(value)}
+          // src={urlFor(value).url()}
           alt={value.alt || ''}
           className="w-full h-auto rounded-lg"
         />
