@@ -2,7 +2,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Clock, User } from "lucide-react"
 import Link from "next/link"
-import type { BlogPost } from "@/lib/blog-data"
+// import type { BlogPost } from "@/lib/blog-data"
+
+// Ensure this file exports the BlogPost type
+
+export interface BlogPost {
+  title: string
+  slug: string
+  image?: string
+  tags: string[]
+  excerpt: string
+  author: {
+    name: string
+  }
+  readTime: string
+  publishedAt: string
+}
 
 interface BlogCardProps {
   post: BlogPost
