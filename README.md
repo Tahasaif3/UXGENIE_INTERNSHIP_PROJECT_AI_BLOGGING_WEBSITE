@@ -1,7 +1,6 @@
 # UXGENIE Internship Project – AI Blogging Website
 
 **Author:** *Taha Saif*
-\**Project 1 – Portfolio Booster (Easy)*
 
 ---
 
@@ -134,4 +133,4 @@ UXGENIE_INTERNSHIP_PROJECT_AI_BLOGGING_WEBSITE/
 
 ## 🔗 Deployment
 
-👉 Live Project: *\[Will be deployed on Vercel]*
+👉 Live Project: [AI Blogging Website](https://uxgenie-internship-project-ai-blogg.vercel.app/)
