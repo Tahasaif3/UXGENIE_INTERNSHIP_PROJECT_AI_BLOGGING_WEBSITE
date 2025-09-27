@@ -36,17 +36,19 @@ const AuthModal: FC<AuthModalProps> = ({
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background/80 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-xl border bg-background p-6 shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+        <h2 className="text-2xl font-bold mb-4 dark:text-gray-50 text-gray-900">{title}</h2>
 
         {/* Fields */}
         {fields.map((field, idx) => (
           <div key={idx} className="mb-4">
-            <label className="block text-sm text-gray-50 font-medium mb-1">{field.label}</label>
+            <label className="block text-sm font-medium mb-1 dark:text-gray-50 text-gray-900">
+              {field.label}
+            </label>
             <input
               type={field.type}
               value={field.value}
               onChange={field.onChange}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm dark:text-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-secondary"
             />
           </div>
         ))}

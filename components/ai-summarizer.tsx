@@ -5,10 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Copy, RefreshCw, Loader2 } from "lucide-react";
+import { Sparkles, Copy, Loader2 } from "lucide-react";
 import { GenerateContentResult, GoogleGenerativeAI } from "@google/generative-ai";
 import toast from "react-hot-toast";
-
 
 // Initialize Gemini SDK with API key from environment variables
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
@@ -105,7 +104,7 @@ If the input is invalid or insufficient, return: "Please provide valid content t
   };
 
   return (
-<Card className="max-w-4xl mx-auto mb-16 border-secondary/20 bg-secondary/5">
+    <Card className="max-w-4xl mx-auto mb-16 border-secondary/20 bg-secondary/5">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-2">
           <Badge variant="secondary" className="px-4 py-2 text-sm font-medium">
@@ -132,7 +131,7 @@ If the input is invalid or insufficient, return: "Please provide valid content t
           </div>
           <div>
             <label className="text-sm font-medium mb-2 block">AI Summary</label>
-            <div className="w-full h-32 p-3 border rounded-lg bg-muted/50 relative overflow-auto">
+            <div className="w-full h-32 p-3 border rounded-lg bg-muted/50 relative overflow-auto flex flex-col">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="flex items-center gap-2 text-muted-foreground">
@@ -141,17 +140,21 @@ If the input is invalid or insufficient, return: "Please provide valid content t
                   </div>
                 </div>
               ) : summary ? (
-                <div className="space-y-3">
+                <div className="flex flex-col h-full justify-between">
                   <p className="text-sm leading-relaxed break-words">{summary}</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="absolute bottom-3 right-3 bg-transparent"
-                  >
-                    <Copy className="h-3 w-3 mr-1" />
-                    Copy
-                  </Button>
+                  {summary && !isLoading && summary !== "Please provide valid content to summarize." && (
+                    <div className="flex justify-end mt-2">
+                      <Button
+                        variant="secondary"
+                        size="default"
+                        onClick={copySummary}
+                        className="bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-colors duration-200 rounded-md"
+                      >
+                        <Copy className="h-4 w-4 mr-2 stroke-current" />
+                        Copy Summary
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
@@ -165,7 +168,7 @@ If the input is invalid or insufficient, return: "Please provide valid content t
           <Button
             onClick={generateSummary}
             disabled={!content.trim() || isLoading || content.length < 50}
-            className="bg-secondary hover:bg-secondary/90"
+            className="bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-colors duration-200 rounded-md"
           >
             {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
             Generate Summary
@@ -175,4 +178,3 @@ If the input is invalid or insufficient, return: "Please provide valid content t
     </Card>
   );
 }
-

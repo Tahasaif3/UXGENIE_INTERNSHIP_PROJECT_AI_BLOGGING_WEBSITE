@@ -72,9 +72,22 @@ export function PricingDialog({ triggerText = "View Pricing" }: { triggerText?: 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent hover:bg-muted/50">
-          {triggerText}
-        </Button>
+      <Button
+        variant="outline"
+        size="lg"
+        className="
+          text-lg px-8 bg-transparent 
+          text-foreground 
+          hover:bg-muted/50 hover:text-foreground 
+          dark:hover:bg-muted/30 dark:hover:text-foreground 
+          transition-all duration-300 ease-out
+          hover:scale-105 hover:shadow-md
+        "
+      >
+        {triggerText}
+      </Button>
+
+
       </DialogTrigger>
       <DialogContent
         ref={dialogRef}
