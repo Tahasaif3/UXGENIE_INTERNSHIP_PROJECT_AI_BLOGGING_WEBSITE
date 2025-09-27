@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Copy, Loader2 } from "lucide-react";
+import { Sparkles, Copy, Loader2, Check } from "lucide-react";
 import { GenerateContentResult, GoogleGenerativeAI } from "@google/generative-ai";
 import toast from "react-hot-toast";
 
@@ -57,6 +57,7 @@ export function AISummarizer() {
   const [content, setContent] = useState("");
   const [summary, setSummary] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   // Initialize the AI Summarizer Agent with Gemini
   const aiAgent = new AIAgent(
@@ -93,14 +94,28 @@ If the input is invalid or insufficient, return: "Please provide valid content t
       setSummary("Please provide valid content to summarize.");
       return;
     }
+    
+    // Reset copy state when generating new summary
+    setIsCopied(false);
 
     const result = await runSync(aiAgent, content);
     setSummary(result.final_output);
   };
 
-  const copySummary = () => {
-    navigator.clipboard.writeText(summary);
-    toast.success("Summary copied to clipboard!");
+  const copySummary = async () => {
+    try {
+      await navigator.clipboard.writeText(summary);
+      setIsCopied(true);
+      toast.success("Summary copied to clipboard!");
+      
+      // Reset the copied state after 2 seconds
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+      toast.error("Failed to copy summary");
+    }
   };
 
   return (
@@ -145,13 +160,23 @@ If the input is invalid or insufficient, return: "Please provide valid content t
                   {summary && !isLoading && summary !== "Please provide valid content to summarize." && (
                     <div className="flex justify-end mt-2">
                       <Button
-                        variant="secondary"
-                        size="default"
+                        variant="outline"
+                        size="sm"
                         onClick={copySummary}
-                        className="bg-secondary hover:bg-secondary/90 text-secondary-foreground transition-colors duration-200 rounded-md"
+                        disabled={isCopied}
+                        className="transition-all duration-200 hover:bg-muted/50 border-border text-foreground hover:border-muted-foreground/50 disabled:opacity-100 dark:hover:bg-secondary/10 dark:border-secondary/30 dark:text-secondary-foreground dark:hover:border-secondary/50"
                       >
-                        <Copy className="h-4 w-4 mr-2 stroke-current" />
-                        Copy Summary
+                        {isCopied ? (
+                          <>
+                            <Check className="h-3 w-3 mr-2 text-green-600 dark:text-green-400" />
+                            <span className="text-green-600 dark:text-green-400">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-3 w-3 mr-2" />
+                            Copy
+                          </>
+                        )}
                       </Button>
                     </div>
                   )}
