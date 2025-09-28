@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/firebase.js", "lib/blog-data.js", "components/portable-text.tsx", "app/blog/[slug]/page.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/firebase.js", "lib/blog-data.js", "components/portable-text.tsx", "app/blog/[slug]/page.tsx", "components/chatbot.tsx"],
   "exclude": ["node_modules"]
 }

@@ -16,7 +16,7 @@ const features = [
   {
     icon: BookOpen,
     title: "Smart Summarization",
-    description: "Transform long-form content into engaging summaries that capture key insights.",
+    description: "Transform long content into engaging summaries that capture key insights.",
     benefits: ["Save 2-3 hours per article", "Improve readability", "Boost engagement", "SEO-friendly output"],
     demo: "Try Summarizer",
     href: "/ai-tools/summarizer",

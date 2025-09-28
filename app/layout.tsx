@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/context/AuthContext"
 import { Toaster } from "react-hot-toast";
 import Footer from "@/components/footer";
+import BlogChatAgent from "@/components/chatbot"; // Add this import
 import "./globals.css"
 
 const montserrat = Montserrat({
@@ -37,12 +38,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${montserrat.variable} ${openSans.variable}`}>
         <AuthProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Suspense fallback={null}>{children}</Suspense>
-          <Footer/>
-          <Toaster/>
-        </ThemeProvider>
-        <Analytics />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Suspense fallback={null}>{children}</Suspense>
+            <Footer/>
+            <BlogChatAgent /> 
+            <Toaster/>
+          </ThemeProvider>
+          <Analytics />
         </AuthProvider>
       </body>
     </html>
