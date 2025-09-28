@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/context/AuthContext"
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/footer";
 import "./globals.css"
 
 const montserrat = Montserrat({
@@ -38,6 +39,7 @@ export default function RootLayout({
         <AuthProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Suspense fallback={null}>{children}</Suspense>
+          <Footer/>
           <Toaster/>
         </ThemeProvider>
         <Analytics />
