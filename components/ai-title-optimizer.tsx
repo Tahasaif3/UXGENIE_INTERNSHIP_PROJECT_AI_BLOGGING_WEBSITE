@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { PenTool, Copy, RefreshCw, Loader2, Eye } from "lucide-react"
+import { PenTool, Copy, RefreshCw, Loader2, Eye, Sparkles } from "lucide-react"
 import { GoogleGenerativeAI, GenerativeModel, GenerateContentResult } from "@google/generative-ai"
 import toast from "react-hot-toast"
 
@@ -230,13 +230,17 @@ Example format:
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <div className="flex items-center gap-2 mb-2">
-          <PenTool className="h-5 w-5 text-secondary" />
-          <Badge variant="secondary">AI Tool</Badge>
+      <CardHeader >
+           <div className="flex justify-center mb-2">
+          <Badge variant="secondary" className="px-4 py-2 text-sm font-medium">
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI Tool
+          </Badge>
         </div>
-        <CardTitle className="font-heading text-2xl">Title Optimizer</CardTitle>
-        <CardDescription>
+        <CardTitle className="font-heading text-2xl sm:mt-2 flex justify-center">
+          Title Optimizer
+        </CardTitle>
+        <CardDescription className="flex justify-center sm:text-sm">
           Create compelling headlines that drive engagement and improve click-through rates with AI analysis.
         </CardDescription>
       </CardHeader>

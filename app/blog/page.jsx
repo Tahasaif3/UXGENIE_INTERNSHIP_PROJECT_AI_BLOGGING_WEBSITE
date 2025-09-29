@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Header } from "@/components/header";
 import { BlogCard } from "@/components/blog-card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search, Filter } from "lucide-react";
 import { getBlogPosts, getAllTags } from "@/lib/blog-data";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function BlogPage() {
   const [posts, setPosts] = useState([]);
@@ -15,6 +19,8 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState("All Posts");
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,7 +37,74 @@ export default function BlogPage() {
       }
     }
     fetchData();
-  }, []); // Empty dependency array means it runs once on mount
+  }, []);
+
+  // GSAP Animations
+  useEffect(() => {
+    if (!loading) {
+      // Header animation
+      gsap.fromTo(
+        ".blog-header",
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        }
+      );
+
+      // Search and filter animation
+      gsap.fromTo(
+        ".search-filter",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.2,
+        }
+      );
+
+      // Blog cards animation (staggered)
+      gsap.fromTo(
+        cardsRef.current,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".blog-grid",
+            start: "top 80%",
+          },
+        }
+      );
+
+      // Load more button animation
+      gsap.fromTo(
+        ".load-more",
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: ".load-more",
+            start: "top 90%",
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [loading]);
 
   // Debounced search and filter logic
   const filteredPosts = useMemo(() => {
@@ -56,15 +129,15 @@ export default function BlogPage() {
       </div>
     );
   }
-
+  
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" ref={sectionRef}>
       <Header />
 
       {/* Blog Header */}
-      <section className="container mx-auto px-4 py-16">
+      <section className="container mx-auto px-4 py-16 blog-header">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h1 className="font-heading text-4xl md:text-5xl font-black mb-6">AI Content Creation Blog</h1>
+          <h1 className="font-heading text-4xl md:text-5xl font-black mb-6">AI <span className="text-secondary">Content </span>Creation Blog</h1>
           <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
             Insights, tutorials, and best practices for creating better content with AI assistance. Stay updated with
             the latest trends and techniques.
@@ -72,22 +145,21 @@ export default function BlogPage() {
         </div>
 
         {/* Search and Filter */}
-        <div className="max-w-4xl mx-auto mb-12">
+        <div className="max-w-4xl mx-auto mb-12 search-filter">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search articles..."
-                className="pl-10"
+                className="pl-10 transition-transform duration-300 hover:scale-[1.02]"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Button
               variant="outline"
-              className="md:w-auto bg-transparent"
+              className="md:w-auto bg-transparent transition-transform duration-300 hover:scale-105"
               onClick={() => {
-                // Toggle filter visibility or open a dropdown (simplified here)
                 setSelectedTag(selectedTag === "All Posts" ? tags[0] || "All Posts" : "All Posts");
               }}
             >
@@ -100,7 +172,7 @@ export default function BlogPage() {
           <div className="flex flex-wrap gap-2">
             <Badge
               variant={selectedTag === "All Posts" ? "secondary" : "outline"}
-              className="cursor-pointer hover:bg-secondary/80"
+              className="cursor-pointer hover:bg-secondary/80 transition-transform duration-300 hover:scale-110"
               onClick={() => setSelectedTag("All Posts")}
             >
               All Posts
@@ -109,7 +181,7 @@ export default function BlogPage() {
               <Badge
                 key={tag}
                 variant={selectedTag === tag ? "secondary" : "outline"}
-                className="cursor-pointer hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
+                className="cursor-pointer hover:bg-secondary hover:text-secondary-foreground hover:border-secondary transition-transform duration-300 hover:scale-110"
                 onClick={() => setSelectedTag(tag)}
               >
                 {tag}
@@ -120,10 +192,18 @@ export default function BlogPage() {
       </section>
 
       {/* Blog Posts Grid */}
-      <section className="container mx-auto px-4 pb-16">
+      <section className="container mx-auto px-4 pb-16 blog-grid">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => <BlogCard key={post.id} post={post} />)
+            filteredPosts.map((post, index) => (
+              <div
+                key={post.id}
+                ref={(el) => (cardsRef.current[index] = el)}
+                className="transition-transform duration-300 hover:scale-[1.03]"
+              >
+                <BlogCard post={post} />
+              </div>
+            ))
           ) : (
             <div className="col-span-full text-center text-muted-foreground">
               No articles found. Try adjusting your search or filter.
@@ -132,8 +212,13 @@ export default function BlogPage() {
         </div>
 
         {/* Load More */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg" disabled={filteredPosts.length === posts.length}>
+        <div className="text-center mt-12 load-more">
+          <Button
+            variant="outline"
+            size="lg"
+            disabled={filteredPosts.length === posts.length}
+            className="transition-transform duration-300 hover:scale-105"
+          >
             Load More Articles
           </Button>
         </div>

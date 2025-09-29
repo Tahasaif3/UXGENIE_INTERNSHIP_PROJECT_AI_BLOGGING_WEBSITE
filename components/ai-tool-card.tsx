@@ -1,7 +1,10 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { type LucideIcon, ArrowRight, Clock } from "lucide-react";
+import { cn } from "@/lib/utils"; // ✅ Critical for className merging
 
 interface AITool {
   id: string;
@@ -15,18 +18,20 @@ interface AITool {
 
 interface AIToolCardProps {
   tool: AITool;
-  onSelect?: (id: string) => void; // Add onSelect prop for click handling
-  className?: string; // Add className as an optional prop
-
+  onSelect?: (id: string) => void;
+  className?: string;
 }
 
-export function AIToolCard({ tool, onSelect }: AIToolCardProps) {
+export function AIToolCard({ tool, onSelect, className }: AIToolCardProps) {
   const Icon = tool.icon;
 
   return (
     <Card
-      className="relative overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer"
-      onClick={() => onSelect && !tool.comingSoon && onSelect(tool.id)} // Trigger selection if not coming soon
+      className={cn(
+        "relative overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer",
+        className // ✅ Now properly merged!
+      )}
+      onClick={() => onSelect && !tool.comingSoon && onSelect(tool.id)}
     >
       {tool.comingSoon && (
         <div className="absolute top-4 right-4 z-10">
@@ -49,7 +54,9 @@ export function AIToolCard({ tool, onSelect }: AIToolCardProps) {
         </div>
 
         <CardTitle className="font-heading text-xl">{tool.title}</CardTitle>
-        <CardDescription className="text-sm leading-relaxed">{tool.description}</CardDescription>
+        <CardDescription className="text-sm leading-relaxed">
+          {tool.description}
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -57,7 +64,10 @@ export function AIToolCard({ tool, onSelect }: AIToolCardProps) {
           <h4 className="text-sm font-medium">Key Features:</h4>
           <ul className="space-y-1">
             {tool.features.map((feature) => (
-              <li key={feature} className="text-xs text-muted-foreground flex items-center gap-2">
+              <li
+                key={feature}
+                className="text-xs text-muted-foreground flex items-center gap-2"
+              >
                 <div className="w-1 h-1 bg-secondary rounded-full"></div>
                 {feature}
               </li>
@@ -65,7 +75,11 @@ export function AIToolCard({ tool, onSelect }: AIToolCardProps) {
           </ul>
         </div>
 
-        <Button className="w-full" variant={tool.comingSoon ? "outline" : "default"} disabled={tool.comingSoon}>
+        <Button
+          className="w-full"
+          variant={tool.comingSoon ? "outline" : "default"}
+          disabled={tool.comingSoon}
+        >
           {tool.comingSoon ? (
             "Available Soon"
           ) : (

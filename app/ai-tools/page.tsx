@@ -8,12 +8,15 @@ import { Header } from "@/components/header";
 import { AIToolCard } from "@/components/ai-tool-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, Search } from "lucide-react";
 import { AISummarizer } from "@/components/ai-summarizer";
 import { AITagGenerator } from "@/components/ai-tag-generator";
 import { AITitleOptimizer } from "@/components/ai-title-optimizer";
 import { PricingDialog } from "@/components/pricing-dialog";
 import { Toast } from "@/components/toast";
+import { AIContentGenerator } from "@/components/ai-content-generator";
+import { AIRewriter } from "@/components/ai-rewriter";
+import { SEOMetaGenerator } from "@/components/seo-meta-generator";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,6 +48,33 @@ const aiTools = [
     features: ["A/B Testing", "Emotional Analysis", "Length Optimization", "Platform-Specific"],
     comingSoon: false,
   },
+  {
+  id: "content-generator",
+  title: "Content Idea Generator",
+  description: "Get a constant stream of fresh, unique content ideas for blogs, social media, and more.",
+  icon: Sparkles,
+  category: "Ideation",
+  features: ["Blog Post Ideas", "Social Media Prompts", "Trending Angles", "Niche-Specific Suggestions"],
+  comingSoon: false,
+},
+{
+  id: "rewriter",
+  title: "AI Rewriter",
+  description: "Rephrase text to be clearer, more engaging, or plagiarism-free.",
+  icon: Sparkles,
+  category: "Editing",
+  features: ["Simplify", "Professionalize", "Humanize", "Shorten"],
+  comingSoon: false,
+},
+{
+  id: "seo-meta",
+  title: "SEO Meta Generator",
+  description: "Create click-worthy titles and descriptions optimized for search.",
+  icon: Search,
+  category: "SEO",
+  features: ["Title Tags", "Meta Descriptions", "Keyword Optimization", "CTR Boost"],
+  comingSoon: false,
+},
 ];
 
 export default function AIToolsPage() {
@@ -62,6 +92,9 @@ export default function AIToolsPage() {
     summarizer: <AISummarizer />,
     "tag-generator": <AITagGenerator />,
     "title-optimizer": <AITitleOptimizer />,
+    "content-generator": <AIContentGenerator />,
+    "rewriter": <AIRewriter />,
+    "seo-meta": <SEOMetaGenerator />,
   };
 
   const handleToolSelect = (toolId: string) => {
@@ -240,7 +273,7 @@ export default function AIToolsPage() {
         ) : (
           <>
             {/* Featured Demo */}
-            {toolComponents["summarizer"] || <AISummarizer />}
+            {toolComponents["summarizer"] || <AISummarizer />}            
             {/* AI Tools Grid */}
             <section className="container mx-auto px-4 pb-16">
               <div className="text-center mb-12">
